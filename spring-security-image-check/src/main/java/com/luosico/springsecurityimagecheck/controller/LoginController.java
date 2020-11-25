@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @Author: luo kai fa
@@ -43,6 +44,12 @@ public class LoginController {
     @GetMapping("/error.html")
     public String toError() {
         return "error";
+    }
+
+    @GetMapping("/invalidSession")
+    @ResponseBody
+    public String invalidSession(){
+        return "Session 已失效，请重新登录";
     }
 
 }

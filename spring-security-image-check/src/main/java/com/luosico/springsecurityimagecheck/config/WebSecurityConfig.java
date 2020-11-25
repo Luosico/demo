@@ -40,6 +40,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     ValidateImageCodeFilter validateImageCodeFilter;
+    
+    @Autowired
+    SessionExpiredStrategy sessionExpiredStrategy;
 
     /**
      * 设置加密方式
@@ -100,6 +103,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login.html", "/error.html","/imageCode").permitAll()
                 //其他路径需要身份认证
                 .anyRequest().authenticated()
+
                 .and()
                 //loginPage指定URL来自定义登录界面
                 .formLogin()//登录表单
@@ -109,9 +113,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()//登录成功后有权限访问所有界面
                 .successHandler(successHandle)
                 .failureHandler(failureHandle)
+
                 .and()
                 .logout()
-                .logoutUrl("/logout");
+                .logoutUrl("/logout")
+
+                .and()
+                .sessionManagement()//添加session管理器
+                .invalidSessionUrl("/invalidSession")//Session失效后跳转URL
+                .maximumSessions(1)//Session最大并发数，即一个帐号对应一个Session，Session并发控制只对Spring Security默认的登录方式——账号密码登录有效
+                .maxSessionsPreventsLogin(false)//false会踢掉之前登录,true则不允许后面登录
+                .expiredSessionStrategy(sessionExpiredStrategy);
+
         //关闭csrf跨域攻击防御
         //如果不关闭，需要在请求接口的时候加入csrfToken才行
         http.csrf().disable();
