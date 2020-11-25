@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+</head>
+<body>
+<form action="/login" method="post" style="width: 300px">
+    <label for="username">帐号</label><input type="text" name="username" id="username"/>
+    <br>
+    <label for="password">密码</label><input type="password" name="password" id="password"/>
+    <br>
+    <span style="display: inline">
+        <input type="text" name="imageCode" placeholder="验证码" style="width: 50%;"/>
+        <img src="/imageCode"/>
+    </span>
+    <br>
+    <input type="submit" value="登录"/>
+</form>
+</body>
+</html>
