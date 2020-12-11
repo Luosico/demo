@@ -15,7 +15,6 @@
     </properties>
 
     <modules>
-
         <module>spring-security</module>
         <module>dubbo</module>
     </modules>
