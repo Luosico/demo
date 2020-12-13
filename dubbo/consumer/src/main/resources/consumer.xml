@@ -6,7 +6,7 @@
        http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
 
     <!-- 指定当前服务的名字，不能重名 -->
-    <dubbo:application name="userServiceConsumer"></dubbo:application>
+    <dubbo:application name="userServiceConsumer"/>
 
     <!-- 注册中心地址 -->
     <dubbo:registry address="zookeeper://127.0.0.1:2181"/>

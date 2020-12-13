@@ -1,5 +1,6 @@
 package com.luosico.demo;
 
+
 import org.apache.dubbo.config.annotation.DubboService;
 import service.UserService;
 
@@ -9,7 +10,6 @@ import service.UserService;
  */
 
 @DubboService
-//@Component
 public class ProviderUserService implements UserService {
 
     @Override
