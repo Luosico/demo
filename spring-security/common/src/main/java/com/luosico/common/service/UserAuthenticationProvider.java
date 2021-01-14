@@ -43,10 +43,13 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         String username = authentication.getName();
         //获取输入的明文
         String password = passwordEncoder.encode((String) authentication.getCredentials());
-        System.out.println(username);
 
-        logger.info("username = " + username);
-        logger.info("password = " + password);
+        logger.info("name = " + authentication.getName());
+        logger.info("Credentials = " + authentication.getCredentials());
+        logger.info("Details = " + authentication.getDetails());
+        logger.info("Authorities = " + authentication.getAuthorities());
+        logger.info("Principal =" + authentication.getPrincipal());
+        logger.info("Class = " + authentication.getClass());
 
         User user = (User) userService.loadUserByUsername(username);
 
@@ -57,13 +60,17 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         /*} else if (!passwordEncoder.matches(password,user.getPassword())) { //密码错误
             logger.info("密码错误！");
             throw new BadCredentialsException("密码错误");*/
-        } else
-            return new UsernamePasswordAuthenticationToken(username, password);
+        } else{
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), authentication.getCredentials(),authentication.getAuthorities());
+            //设置已经验证
+            //token.setAuthenticated(true);
+            return token;
+        }
 
     }
 
     /**
-     * 询问其是否支持传递给authenticate()方法
+     * 询问其是否支持传递给 authenticate()方法
      *
      * @param aClass
      * @return
@@ -72,9 +79,10 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
     public boolean supports(Class<?> aClass) {
         //确保authentication能转成该类
         //return aClass.equals(UsernamePasswordAuthenticationToken.class);
-        System.out.println("-----------------------");
 
+        boolean result = true;
+        logger.info("supports = " + result);
         //返回false时，即不会再调用authenticate()进行认证操作
-        return false;
+        return result;
     }
 }

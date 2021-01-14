@@ -22,7 +22,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Autowired
-    UserAuthenticationProvider userAuthenticationProvider;
+    UserAuthenticationProvider UserAuthenticationProvider;
 
     @Autowired
     UserService userService;
@@ -54,14 +54,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
         //设置自定义认证
-        //auth.authenticationProvider(userAuthenticationProvider);
-        auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
+        //auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
+
+        //自定义 AuthenticationProvider
+        auth.authenticationProvider(UserAuthenticationProvider);
+        //另一个 provider，只要有一个provider验证成功就算成功
+        //auth.authenticationProvider(afterProvider);
 
         //存在内存中
         //auth.inMemoryAuthentication().passwordEncoder(new BCryptPasswordEncoder()).withUser("hello").password(new BCryptPasswordEncoder().encode("123")).roles("USER");
-
-        //另一个 provider，只要有一个provider验证成功就算成功
-        //auth.authenticationProvider(afterProvider);
 
     }
 

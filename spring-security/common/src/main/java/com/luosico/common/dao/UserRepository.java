@@ -31,9 +31,9 @@ public class UserRepository {
 
     public User findUserByUsername(String username) {
         logger.info("是否存在用户: " + users.containsKey(username));
+        //用户存在
         if (users.containsKey(username)) {
             logger.info("username: " + username);
-            logger.info(String.valueOf(users.get(username) == null));
             return users.get(username);
         }
         //返回空对象会报 error 错误
