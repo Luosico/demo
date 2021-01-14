@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -23,7 +24,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     UserService userService;
 
-    //解密
+    //加密解析器
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -34,7 +35,6 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
      * 对信息进行认证
      *
      * @param authentication 未认证信息
-     * @return
      * @throws AuthenticationException
      */
     @Override
@@ -42,7 +42,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         //获取输入的用户名
         String username = authentication.getName();
         //获取输入的明文
-        String password = passwordEncoder.encode((String) authentication.getCredentials());
+        String password = (String) authentication.getCredentials();
 
         logger.info("name = " + authentication.getName());
         logger.info("Credentials = " + authentication.getCredentials());
@@ -57,9 +57,12 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         if (user == null) {
             logger.info("该用户： " + username + " 不存在");
             throw new UsernameNotFoundException("不存在该用户");
-        /*} else if (!passwordEncoder.matches(password,user.getPassword())) { //密码错误
+        } else if (!passwordEncoder.matches(password,user.getPassword())) { //密码错误
+            logger.info("password: " + password);
+            logger.info("数据库 password: "+ user.getPassword());
+            logger.info("匹配结果: " + passwordEncoder.matches(password,user.getPassword()));
             logger.info("密码错误！");
-            throw new BadCredentialsException("密码错误");*/
+            throw new BadCredentialsException("密码错误");
         } else{
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), authentication.getCredentials(),authentication.getAuthorities());
             //设置已经验证
